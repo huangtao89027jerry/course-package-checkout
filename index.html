@@ -12,6 +12,7 @@
       --line: #e9edf2;
       --surface: #f4f6f8;
       --block: #f1f3f6;
+      --block-gap: 10px;
       --blue: #3978f6;
       --blue-soft: #eef4ff;
       --orange: #f8a800;
@@ -260,7 +261,7 @@
 
     .course-list {
       display: grid;
-      gap: 10px;
+      gap: var(--block-gap);
     }
 
     .course-card {
@@ -425,7 +426,7 @@
     .chips {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: var(--block-gap);
     }
 
     .chip {
@@ -459,7 +460,7 @@
 
     .class-list {
       display: grid;
-      gap: 10px;
+      gap: var(--block-gap);
     }
 
     .class-option {
@@ -523,7 +524,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-top: 16px;
+      margin-top: var(--block-gap);
       padding: 12px 14px;
       border: 1px solid transparent;
       border-radius: 10px;
