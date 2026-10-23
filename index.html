@@ -13,6 +13,7 @@
       --surface: #f4f6f8;
       --block: #f5f6f8;
       --block-gap: 10px;
+      --page-gutter: 12px;
       --blue: #3978f6;
       --blue-soft: #eef4ff;
       --orange: #f8a800;
@@ -170,7 +171,7 @@
       position: relative;
       z-index: 2;
       margin-top: -9px;
-      padding: 26px 20px 20px;
+      padding: 26px var(--page-gutter) 20px;
       border-radius: 18px 18px 0 0;
       background: var(--white);
     }
@@ -211,7 +212,7 @@
 
     .config-section {
       margin-top: 8px;
-      padding: 19px 20px 20px;
+      padding: 19px var(--page-gutter) 20px;
       border-top: 1px solid #eef0f3;
       background: var(--white);
     }
@@ -580,7 +581,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 6px 14px calc(7px + env(safe-area-inset-bottom));
+      padding: 6px var(--page-gutter) calc(7px + env(safe-area-inset-bottom));
       border-top: 1px solid #e9ebef;
       background: rgba(255, 255, 255, .96);
       box-shadow: 0 -8px 26px rgba(30, 38, 52, .07);
@@ -716,7 +717,7 @@
     }
 
     .seat-card {
-      margin: 0 12px;
+      margin: 0 var(--page-gutter);
       padding: 19px 14px 17px;
       border: 1px solid rgba(233, 237, 242, .9);
       border-radius: 16px;
