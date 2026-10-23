@@ -226,7 +226,7 @@
     .config-section {
       margin-top: 8px;
       padding: 19px 20px 20px;
-      border-top: 8px solid var(--surface);
+      border-top: 1px solid #eef0f3;
       background: var(--white);
     }
 
@@ -268,12 +268,6 @@
       border-radius: 16px;
       background: #fafbfc;
       box-shadow: none;
-      transition: background-color .2s ease, box-shadow .2s ease;
-    }
-
-    .course-card.is-open {
-      background: #f8faff;
-      box-shadow: 0 7px 20px rgba(45, 87, 169, .045);
     }
 
     .course-card.is-attention {
@@ -444,11 +438,14 @@
       cursor: pointer;
     }
 
-    .chip.is-selected,
-    .class-option.is-selected {
+    .chip.is-selected {
       border-color: var(--blue);
       background: var(--blue-soft);
       box-shadow: 0 2px 7px rgba(57, 120, 246, .1);
+    }
+
+    .class-option.is-selected {
+      background: var(--blue-soft);
     }
 
     .chip.is-selected,
@@ -459,18 +456,25 @@
 
     .class-list {
       display: grid;
-      gap: 8px;
+      overflow: hidden;
+      border: 1px solid #e7eaef;
+      border-radius: 12px;
+      background: var(--white);
     }
 
     .class-option {
       position: relative;
       width: 100%;
       padding: 13px 34px 12px 13px;
-      border: 1px solid #e8eaee;
-      border-radius: 12px;
+      border: 0;
+      border-radius: 0;
       text-align: left;
-      background: var(--white);
+      background: transparent;
       cursor: pointer;
+    }
+
+    .class-option + .class-option {
+      border-top: 1px solid #edf0f3;
     }
 
     .class-option.is-selected .class-detail {
@@ -479,7 +483,7 @@
 
     .class-option:disabled {
       color: #a2a5ac;
-      background: #f5f6f8;
+      background: transparent;
       cursor: not-allowed;
       opacity: .62;
     }
@@ -530,10 +534,11 @@
       justify-content: space-between;
       gap: 12px;
       margin-top: 16px;
-      padding: 11px 12px;
-      border: 1px solid #edf0f4;
-      border-radius: 11px;
-      background: var(--white);
+      padding: 13px 0 0;
+      border: 0;
+      border-top: 1px solid #e7eaef;
+      border-radius: 0;
+      background: transparent;
     }
 
     .seat-state {
