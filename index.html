@@ -259,19 +259,19 @@
     }
 
     .course-card.is-attention {
-      box-shadow: 0 0 0 3px rgba(244, 183, 64, .16), 0 8px 24px rgba(184, 118, 0, .1);
+      box-shadow: 0 0 0 3px rgba(229, 88, 88, .16), 0 8px 24px rgba(160, 34, 34, .09);
       animation: attentionPulse 1.1s ease-in-out 2;
     }
 
     .course-card.is-attention .course-number {
-      color: #7c5600;
-      background: #ffe3a3;
+      color: var(--danger);
+      background: #ffe8e7;
     }
 
     .chip.is-attention-target,
     .class-option.is-attention-target {
-      border-color: #f0a51c;
-      box-shadow: 0 0 0 3px rgba(240, 165, 28, .18);
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(229, 88, 88, .16);
     }
 
     .course-head {
@@ -939,11 +939,11 @@
     @keyframes attentionPulse {
       0%,
       100% {
-        box-shadow: 0 0 0 3px rgba(244, 183, 64, .12), 0 8px 22px rgba(184, 118, 0, .07);
+        box-shadow: 0 0 0 3px rgba(229, 88, 88, .12), 0 8px 22px rgba(160, 34, 34, .06);
       }
 
       50% {
-        box-shadow: 0 0 0 6px rgba(244, 183, 64, .2), 0 8px 26px rgba(184, 118, 0, .12);
+        box-shadow: 0 0 0 6px rgba(229, 88, 88, .2), 0 8px 26px rgba(160, 34, 34, .1);
       }
     }
 
