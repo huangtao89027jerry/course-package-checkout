@@ -476,8 +476,8 @@
     }
 
     .class-option.is-selected {
-      border-color: var(--blue);
-      border-radius: 10px 10px 0 0;
+      border-color: transparent;
+      border-radius: 0;
       background: var(--blue-soft);
     }
 
@@ -490,6 +490,13 @@
     .class-list {
       display: grid;
       gap: var(--block-gap);
+    }
+
+    .selected-class-group {
+      overflow: hidden;
+      border: 1px solid var(--blue);
+      border-radius: 10px;
+      background: var(--block);
     }
 
     .class-option {
@@ -546,24 +553,32 @@
 
     .seat-row {
       display: flex;
+      width: 100%;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
       margin-top: 0;
       padding: 12px 14px 12px 26px;
-      border: 1px solid transparent;
-      border-radius: 10px;
+      border: 0;
+      border-radius: 0;
       background: var(--block);
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
     }
 
     .seat-row.is-selected {
-      border-color: var(--blue);
       background: var(--blue-soft);
     }
 
-    .class-option.is-selected + .seat-row {
-      margin-top: calc(var(--block-gap) * -1);
-      border-radius: 0 0 10px 10px;
+    .selected-class-group .class-option {
+      border-radius: 0;
+    }
+
+    .selected-class-group .class-option:focus-visible,
+    .selected-class-group .seat-row:focus-visible {
+      outline-offset: -3px;
     }
 
     .seat-row.is-revealing {
@@ -1340,20 +1355,25 @@
                   ${course.classes.map(item => {
                     const isFull = item.seats === 0;
                     const isSelected = selection.classId === item.id;
-                    return `
+                    const classButton = `
                     <button class="class-option ${isSelected ? "is-selected" : ""}" type="button" data-action="select-class" data-course="${course.id}" data-class="${item.id}" ${isFull ? "disabled" : ""}>
                       <span class="class-name">${escapeHtml(item.name)}${isFull ? '<span class="class-full">已满</span>' : ""}</span>
                       <span class="class-detail">${escapeHtml(item.time)}</span>
                     </button>
-                    ${isSelected && selectedClass ? `
-                    <div class="seat-row ${selection.seat ? "is-selected" : ""}">
+                    `;
+                    if (!isSelected || !selectedClass) return classButton;
+
+                    return `
+                    <div class="selected-class-group">
+                      ${classButton}
+                      <button class="seat-row ${selection.seat ? "is-selected" : ""}" type="button" data-action="open-seat" data-course="${course.id}">
                       <span class="seat-state">
                         <span class="seat-label">座位</span>
                         <span class="seat-value ${selection.seat ? "has-value" : "has-remaining"}">${selection.seat ? escapeHtml(selection.seat.label) : `剩余 ${selectedClass.seats} 席`}</span>
                       </span>
-                      <button class="outline-button" type="button" data-action="open-seat" data-course="${course.id}">${selection.seat ? "重新选座" : "选择座位"}</button>
+                      <span class="outline-button">${selection.seat ? "重新选座" : "选择座位"}</span>
+                      </button>
                     </div>
-                    ` : ""}
                   `;
                   }).join("")}
                 </div>
