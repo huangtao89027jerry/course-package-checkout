@@ -264,20 +264,19 @@
 
     .course-card {
       overflow: hidden;
-      border: 1px solid #e7eaef;
+      border: 0;
       border-radius: 16px;
-      background: #f7f8fa;
+      background: #fafbfc;
       box-shadow: none;
-      transition: border-color .2s ease, box-shadow .2s ease;
+      transition: background-color .2s ease, box-shadow .2s ease;
     }
 
     .course-card.is-open {
-      border-color: #c9dafb;
-      box-shadow: 0 7px 20px rgba(45, 87, 169, .055);
+      background: #f8faff;
+      box-shadow: 0 7px 20px rgba(45, 87, 169, .045);
     }
 
     .course-card.is-attention {
-      border-color: #f4b740;
       box-shadow: 0 0 0 3px rgba(244, 183, 64, .16), 0 8px 24px rgba(184, 118, 0, .1);
       animation: attentionPulse 1.1s ease-in-out 2;
     }
@@ -291,10 +290,6 @@
     .class-option.is-attention-target {
       border-color: #f0a51c;
       box-shadow: 0 0 0 3px rgba(240, 165, 28, .18);
-    }
-
-    .course-card.is-complete {
-      border-color: #dff2e7;
     }
 
     .course-head {
