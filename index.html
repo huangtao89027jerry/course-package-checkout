@@ -1225,15 +1225,12 @@
               </div>
 
               <div class="choice-block">
-                <div class="choice-label">
-                  选择班级 <span class="required">*</span>
-                  ${selection.spec ? "" : '<span class="choice-hint">请先选择规格</span>'}
-                </div>
+                <div class="choice-label">选择班级 <span class="required">*</span></div>
                 <div class="class-list">
                   ${course.classes.map(item => {
                     const isFull = item.seats === 0;
                     return `
-                    <button class="class-option ${selection.classId === item.id ? "is-selected" : ""}" type="button" data-action="select-class" data-course="${course.id}" data-class="${item.id}" ${selection.spec && !isFull ? "" : "disabled"}>
+                    <button class="class-option ${selection.classId === item.id ? "is-selected" : ""}" type="button" data-action="select-class" data-course="${course.id}" data-class="${item.id}" ${isFull ? "disabled" : ""}>
                       <span class="class-name">${escapeHtml(item.name)}</span>
                       <span class="class-detail">${escapeHtml(item.time)}</span>
                       ${isFull ? '<span class="class-full">已满</span>' : ""}
