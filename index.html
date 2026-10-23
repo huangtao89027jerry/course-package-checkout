@@ -631,11 +631,19 @@
       cursor: pointer;
     }
 
-    .outline-button:disabled {
-      border-color: #dfe1e5;
-      color: #aaaeb5;
-      background: #f1f2f4;
-      cursor: not-allowed;
+    .seat-modify {
+      display: inline-flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 2px;
+      color: #858890;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .seat-modify svg {
+      width: 15px;
+      height: 15px;
     }
 
     .bottom-bar {
@@ -1375,7 +1383,13 @@
                         <span class="seat-label">座位</span>
                         <span class="seat-value ${selection.seat ? "has-value" : "has-remaining"}">${selection.seat ? escapeHtml(selection.seat.label) : `剩余 ${selectedClass.seats} 席`}</span>
                       </span>
-                      <span class="outline-button">${selection.seat ? "重新选座" : "选择座位"}</span>
+                      ${selection.seat ? `
+                      <span class="seat-modify">修改
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                          <path d="M9 6l6 6-6 6"/>
+                        </svg>
+                      </span>
+                      ` : '<span class="outline-button">选择座位</span>'}
                       </button>
                     </div>
                   `;
