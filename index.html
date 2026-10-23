@@ -429,7 +429,7 @@
     .chip {
       min-width: 76px;
       padding: 9px 15px;
-      border: 0;
+      border: 1px solid transparent;
       border-radius: 10px;
       color: #555860;
       text-align: center;
@@ -440,10 +440,12 @@
     }
 
     .chip.is-selected {
+      border-color: var(--blue);
       background: var(--blue-soft);
     }
 
     .class-option.is-selected {
+      border-color: var(--blue);
       background: var(--blue-soft);
     }
 
@@ -462,7 +464,7 @@
       position: relative;
       width: 100%;
       padding: 13px 34px 12px 13px;
-      border: 0;
+      border: 1px solid transparent;
       border-radius: 10px;
       text-align: left;
       background: var(--block);
@@ -531,9 +533,14 @@
       gap: 12px;
       margin-top: 16px;
       padding: 12px;
-      border: 0;
+      border: 1px solid transparent;
       border-radius: 10px;
       background: var(--block);
+    }
+
+    .seat-row.is-selected {
+      border-color: var(--blue);
+      background: var(--blue-soft);
     }
 
     .seat-state {
@@ -1242,7 +1249,7 @@
                 </div>
               </div>
 
-              <div class="seat-row">
+              <div class="seat-row ${selection.seat ? "is-selected" : ""}">
                 <span class="seat-state">
                   <span class="seat-label">座位</span>
                   <span class="seat-value ${selection.seat ? "has-value" : selectedClass ? "has-remaining" : ""}">${selection.seat ? escapeHtml(selection.seat.label) : selectedClass ? `剩余 ${selectedClass.seats} 席` : "选择班级后可选座"}</span>
