@@ -552,6 +552,10 @@
       background: var(--blue-soft);
     }
 
+    .seat-row.is-revealing {
+      animation: seatRowIn .18s cubic-bezier(.2, .75, .3, 1);
+    }
+
     .seat-state {
       min-width: 0;
     }
@@ -1036,6 +1040,18 @@
         transform: rotate(90deg) scale(1);
       }
     }
+
+    @keyframes seatRowIn {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
@@ -1302,13 +1318,15 @@
                 </div>
               </div>
 
+              ${selectedClass ? `
               <div class="seat-row ${selection.seat ? "is-selected" : ""}">
                 <span class="seat-state">
                   <span class="seat-label">座位</span>
-                  <span class="seat-value ${selection.seat ? "has-value" : selectedClass ? "has-remaining" : ""}">${selection.seat ? escapeHtml(selection.seat.label) : selectedClass ? `剩余 ${selectedClass.seats} 席` : "选择班级后可选座"}</span>
+                  <span class="seat-value ${selection.seat ? "has-value" : "has-remaining"}">${selection.seat ? escapeHtml(selection.seat.label) : `剩余 ${selectedClass.seats} 席`}</span>
                 </span>
-                <button class="outline-button" type="button" data-action="open-seat" data-course="${course.id}" ${selectedClass ? "" : "disabled"}>${selection.seat ? "重新选座" : "选择座位"}</button>
+                <button class="outline-button" type="button" data-action="open-seat" data-course="${course.id}">${selection.seat ? "重新选座" : "选择座位"}</button>
               </div>
+              ` : ""}
             </div>
           </article>
         `;
@@ -1414,16 +1432,25 @@
 
     function selectClass(courseId, classId) {
       const selection = getSelection(courseId);
+      const shouldRevealSeat = !selection.classId;
       if (selection.classId !== classId) {
         selection.seat = null;
       }
       selection.classId = classId;
       renderCourses();
+      if (shouldRevealSeat) animateSeatRow(courseId);
     }
 
     function pickSeat(courseId, key, label) {
       getSelection(courseId).seat = { key, label };
       renderSeatLayer();
+    }
+
+    function animateSeatRow(courseId) {
+      const row = courseList.querySelector(`[data-course-card="${courseId}"] .seat-row`);
+      if (!row) return;
+      row.classList.add("is-revealing");
+      row.addEventListener("animationend", () => row.classList.remove("is-revealing"), { once: true });
     }
 
     function continueConfiguration() {
