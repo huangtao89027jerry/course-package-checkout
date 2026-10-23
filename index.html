@@ -11,8 +11,8 @@
       --muted: #8b8d94;
       --line: #e9edf2;
       --surface: #f4f6f8;
-      --blue: #3978f6;
-      --blue-soft: #eef4ff;
+      --brand: #e1251b;
+      --brand-soft: #fff1ef;
       --orange: #f8a800;
       --orange-soft: #fff4d8;
       --yellow: #ffc846;
@@ -44,7 +44,7 @@
     }
 
     button:focus-visible {
-      outline: 3px solid rgba(57, 120, 246, .35);
+      outline: 3px solid rgba(225, 37, 27, .28);
       outline-offset: 2px;
     }
 
@@ -189,7 +189,7 @@
     }
 
     .price {
-      color: var(--orange);
+      color: var(--brand);
       font-size: 31px;
       font-weight: 750;
       font-variant-numeric: tabular-nums;
@@ -359,9 +359,9 @@
     }
 
     .status-pill.ready {
-      border-color: rgba(46, 99, 199, .08);
-      color: #2e63c7;
-      background: var(--blue-soft);
+      border-color: rgba(225, 37, 27, .08);
+      color: var(--brand);
+      background: var(--brand-soft);
     }
 
     .status-pill.complete {
@@ -439,16 +439,16 @@
     }
 
     .chip.is-selected {
-      background: var(--blue-soft);
+      background: var(--brand-soft);
     }
 
     .class-option.is-selected {
-      background: var(--blue-soft);
+      background: var(--brand-soft);
     }
 
     .chip.is-selected,
     .class-option.is-selected .class-name {
-      color: #245dcc;
+      color: var(--brand);
       font-weight: 600;
     }
 
@@ -473,7 +473,7 @@
     }
 
     .class-option.is-selected .class-detail {
-      color: #637da9;
+      color: #a7564f;
     }
 
     .class-option:disabled {
@@ -520,7 +520,7 @@
     }
 
     .class-option.is-selected .radio {
-      border: 5px solid var(--blue);
+      border: 5px solid var(--brand);
     }
 
     .seat-row {
@@ -555,7 +555,7 @@
     }
 
     .seat-value.has-value {
-      color: var(--blue);
+      color: var(--brand);
       font-weight: 600;
     }
 
@@ -567,17 +567,16 @@
     .outline-button {
       flex: 0 0 auto;
       padding: 8px 14px;
-      border: 1px solid var(--blue);
+      border: 0;
       border-radius: 9px;
-      color: var(--blue);
-      background: #fbfdff;
+      color: var(--brand);
+      background: var(--brand-soft);
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
     }
 
     .outline-button:disabled {
-      border-color: #dfe1e5;
       color: #aaaeb5;
       background: #f1f2f4;
       cursor: not-allowed;
@@ -624,7 +623,7 @@
     }
 
     .nav-item:active {
-      color: var(--blue);
+      color: var(--brand);
     }
 
     .nav-icon {
@@ -657,7 +656,7 @@
       place-items: center;
       border-radius: 999px;
       color: var(--white);
-      background: #ff9d1f;
+      background: var(--brand);
       font-size: 9px;
       font-weight: 700;
       line-height: 1;
@@ -674,15 +673,15 @@
       border: 0;
       border-radius: 12px;
       color: var(--white);
-      background: linear-gradient(180deg, #4a83fb 0%, #326ef1 100%);
+      background: linear-gradient(180deg, #f45043 0%, #df251b 100%);
       font-size: 15px;
       font-weight: 650;
       cursor: pointer;
-      box-shadow: 0 6px 16px rgba(57, 120, 246, .24);
+      box-shadow: 0 6px 16px rgba(225, 37, 27, .2);
     }
 
     .primary-button:active {
-      background: linear-gradient(180deg, #3d77ef 0%, #2c63dd 100%);
+      background: linear-gradient(180deg, #e94439 0%, #c91f16 100%);
       transform: translateY(1px);
     }
 
@@ -789,8 +788,8 @@
       padding: 0;
       border: 0;
       border-radius: 10px 10px 7px 7px;
-      color: #aa7b21;
-      background: #ffebc8;
+      color: #7c8189;
+      background: #f1f3f5;
       font-size: 10px;
       font-weight: 600;
       cursor: pointer;
@@ -827,8 +826,8 @@
 
     .seat.is-selected {
       color: var(--white);
-      background: #ff9f1a;
-      box-shadow: 0 4px 10px rgba(238, 144, 0, .24);
+      background: var(--brand);
+      box-shadow: 0 4px 10px rgba(225, 37, 27, .2);
     }
 
     .seat.is-selected::after {
@@ -856,11 +855,11 @@
       width: 10px;
       height: 10px;
       border-radius: 3px;
-      background: #ffebc8;
+      background: #f1f3f5;
     }
 
     .legend .current {
-      background: #ff9f1a;
+      background: var(--brand);
     }
 
     .legend .disabled {
