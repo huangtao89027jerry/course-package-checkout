@@ -1,0 +1,1474 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>套餐报名</title>
+  <style>
+    :root {
+      --app-width: 480px;
+      --ink: #202124;
+      --muted: #8b8d94;
+      --line: #e9edf2;
+      --surface: #f4f6f8;
+      --blue: #3978f6;
+      --blue-soft: #eef4ff;
+      --orange: #f8a800;
+      --orange-soft: #fff4d8;
+      --yellow: #ffc846;
+      --white: #fff;
+      --danger: #e95858;
+      --shadow: 0 12px 32px rgba(26, 39, 59, .07);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      background: #17191d;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #17191d;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button {
+      color: inherit;
+      font: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible {
+      outline: 3px solid rgba(57, 120, 246, .35);
+      outline-offset: 2px;
+    }
+
+    .app {
+      width: min(100%, var(--app-width));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding-bottom: calc(86px + env(safe-area-inset-bottom));
+      background: var(--white);
+      box-shadow: 0 0 56px rgba(0, 0, 0, .28);
+    }
+
+    .topbar {
+      position: relative;
+      z-index: 4;
+      display: grid;
+      grid-template-columns: 52px 1fr 52px;
+      align-items: center;
+      height: 54px;
+      color: var(--white);
+      background: #15171b;
+      box-shadow: inset 0 -1px 0 rgba(255, 255, 255, .04);
+    }
+
+    .topbar-title {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: .2px;
+      text-align: center;
+    }
+
+    .icon-button {
+      display: grid;
+      width: 44px;
+      height: 44px;
+      margin: 0 auto;
+      padding: 0;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: inherit;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .icon-button:active {
+      background: rgba(0, 0, 0, .08);
+    }
+
+    .icon-button svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .hero {
+      position: relative;
+      height: 232px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 76% 20%, rgba(255, 255, 255, .18), transparent 25%),
+        linear-gradient(130deg, #ffb716 0%, #ffd35a 71%, #fff3cf 71%, #fff8ea 100%);
+    }
+
+    .hero::after {
+      position: absolute;
+      right: -18%;
+      bottom: -68%;
+      width: 106%;
+      height: 105%;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .18);
+      content: "";
+      transform: rotate(-12deg);
+    }
+
+    .hero-word {
+      position: absolute;
+      top: 55px;
+      left: 28px;
+      color: var(--white);
+      font-size: 54px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      line-height: 1;
+      text-shadow: 0 2px 0 rgba(219, 147, 0, .12);
+    }
+
+    .hero-sub {
+      position: absolute;
+      top: 120px;
+      left: 31px;
+      color: rgba(255, 255, 255, .66);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 7px;
+    }
+
+    .hero-watermark {
+      position: absolute;
+      top: -20px;
+      left: -34px;
+      color: rgba(255, 255, 255, .13);
+      font-size: 112px;
+      font-weight: 900;
+      letter-spacing: -10px;
+      white-space: nowrap;
+    }
+
+    .package-art {
+      position: absolute;
+      z-index: 1;
+      top: 26px;
+      right: 12px;
+      width: 212px;
+      height: 184px;
+      filter: drop-shadow(0 10px 8px rgba(116, 73, 0, .16));
+    }
+
+    .product-card {
+      position: relative;
+      z-index: 2;
+      margin-top: -9px;
+      padding: 26px 20px 20px;
+      border-radius: 18px 18px 0 0;
+      background: var(--white);
+    }
+
+    .product-title {
+      margin: 0 0 10px;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -.3px;
+      line-height: 1.35;
+    }
+
+    .price-line {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .price {
+      color: var(--orange);
+      font-size: 31px;
+      font-weight: 750;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -.5px;
+    }
+
+    .price small {
+      margin-right: 2px;
+      font-size: 18px;
+    }
+
+    .original-price {
+      color: #a2a4aa;
+      font-size: 14px;
+      text-decoration: line-through;
+    }
+
+    .product-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .meta-pill {
+      padding: 5px 10px;
+      border: 1px solid #eff1f4;
+      border-radius: 999px;
+      color: #686b72;
+      background: #f7f8fa;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .config-section {
+      margin-top: 8px;
+      padding: 19px 20px 20px;
+      border-top: 8px solid var(--surface);
+      background: var(--white);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -.1px;
+    }
+
+    .section-count {
+      padding: 3px 8px;
+      border-radius: 999px;
+      color: #7b7e86;
+      background: #e9ebef;
+      font-size: 11px;
+      font-weight: 550;
+    }
+
+    .course-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .course-card {
+      overflow: hidden;
+      border: 1px solid #e7eaef;
+      border-radius: 16px;
+      background: #f7f8fa;
+      box-shadow: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .course-card.is-open {
+      border-color: #c9dafb;
+      box-shadow: 0 7px 20px rgba(45, 87, 169, .055);
+    }
+
+    .course-card.is-attention {
+      border-color: #f4b740;
+      box-shadow: 0 0 0 3px rgba(244, 183, 64, .16), 0 8px 24px rgba(184, 118, 0, .1);
+      animation: attentionPulse 1.1s ease-in-out 2;
+    }
+
+    .course-card.is-attention .course-number {
+      color: #7c5600;
+      background: #ffe3a3;
+    }
+
+    .chip.is-attention-target,
+    .class-option.is-attention-target {
+      border-color: #f0a51c;
+      box-shadow: 0 0 0 3px rgba(240, 165, 28, .18);
+    }
+
+    .course-card.is-complete {
+      border-color: #dff2e7;
+    }
+
+    .course-head {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      min-height: 70px;
+      padding: 14px 14px 13px 12px;
+      border: 0;
+      text-align: left;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .course-number {
+      display: grid;
+      width: 28px;
+      height: 28px;
+      place-items: center;
+      border-radius: 10px;
+      color: #8a6a25;
+      background: #fff1ce;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .course-card.is-complete .course-number {
+      color: #32794b;
+      background: #e8f7ed;
+    }
+
+    .course-main {
+      min-width: 0;
+    }
+
+    .course-title {
+      display: block;
+      margin: 0;
+      font-size: 15px;
+      font-weight: 650;
+      letter-spacing: -.1px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .course-summary {
+      display: block;
+      margin-top: 5px;
+      color: #8e9198;
+      font-size: 12px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .course-arrow {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #a2a5ac;
+    }
+
+    .status-pill {
+      padding: 4px 7px;
+      border: 1px solid rgba(166, 106, 0, .06);
+      border-radius: 999px;
+      color: #a66a00;
+      background: var(--orange-soft);
+      font-size: 10px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .status-pill.ready {
+      border-color: rgba(46, 99, 199, .08);
+      color: #2e63c7;
+      background: var(--blue-soft);
+    }
+
+    .status-pill.complete {
+      border-color: rgba(56, 129, 88, .08);
+      color: #388158;
+      background: #e9f7ee;
+    }
+
+    .chevron {
+      width: 15px;
+      height: 15px;
+      transition: transform .2s ease;
+    }
+
+    .course-card.is-open .chevron {
+      transform: rotate(90deg);
+    }
+
+    .course-body {
+      display: none;
+      padding: 0 14px 16px;
+      border-top: 1px solid #f0f2f5;
+    }
+
+    .course-card.is-open .course-body {
+      display: block;
+    }
+
+    .course-body.is-entering {
+      animation: courseBodyIn .18s cubic-bezier(.2, .75, .3, 1);
+      transform-origin: top;
+    }
+
+    .choice-block {
+      padding-top: 16px;
+    }
+
+    .choice-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 9px;
+      color: #34373d;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .required {
+      color: var(--danger);
+    }
+
+    .choice-hint {
+      color: #a1a4aa;
+      font-size: 11px;
+      font-weight: 400;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      min-width: 76px;
+      padding: 9px 15px;
+      border: 1px solid #e4e8ee;
+      border-radius: 10px;
+      color: #555860;
+      text-align: center;
+      background: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .chip.is-selected,
+    .class-option.is-selected {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+      box-shadow: 0 2px 7px rgba(57, 120, 246, .1);
+    }
+
+    .chip.is-selected,
+    .class-option.is-selected .class-name {
+      color: #245dcc;
+      font-weight: 600;
+    }
+
+    .class-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .class-option {
+      position: relative;
+      width: 100%;
+      padding: 13px 34px 12px 13px;
+      border: 1px solid #e8eaee;
+      border-radius: 12px;
+      text-align: left;
+      background: var(--white);
+      cursor: pointer;
+    }
+
+    .class-option.is-selected .class-detail {
+      color: #637da9;
+    }
+
+    .class-option:disabled {
+      color: #a2a5ac;
+      background: #f5f6f8;
+      cursor: not-allowed;
+      opacity: .62;
+    }
+
+    .class-name {
+      display: block;
+      margin-bottom: 5px;
+      color: #30333a;
+      font-size: 13.5px;
+      font-weight: 650;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .class-detail {
+      display: block;
+      color: #7d8087;
+      font-size: 11.5px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .class-full {
+      display: block;
+      margin-top: 4px;
+      color: #969aa2;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .radio {
+      position: absolute;
+      top: 14px;
+      right: 13px;
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid #ccd0d7;
+      border-radius: 50%;
+    }
+
+    .class-option.is-selected .radio {
+      border: 5px solid var(--blue);
+    }
+
+    .seat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 11px 12px;
+      border: 1px solid #edf0f4;
+      border-radius: 11px;
+      background: var(--white);
+    }
+
+    .seat-state {
+      min-width: 0;
+    }
+
+    .seat-label {
+      margin-bottom: 3px;
+      color: #34373d;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .seat-value {
+      overflow: hidden;
+      color: #90939a;
+      font-size: 11px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .seat-value.has-value {
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .seat-value.has-remaining {
+      color: #a76a00;
+      font-weight: 600;
+    }
+
+    .outline-button {
+      flex: 0 0 auto;
+      padding: 8px 14px;
+      border: 1px solid var(--blue);
+      border-radius: 9px;
+      color: var(--blue);
+      background: #fbfdff;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .outline-button:disabled {
+      border-color: #dfe1e5;
+      color: #aaaeb5;
+      background: #f1f2f4;
+      cursor: not-allowed;
+    }
+
+    .bottom-bar {
+      position: fixed;
+      z-index: 10;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: min(100%, var(--app-width));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 14px calc(7px + env(safe-area-inset-bottom));
+      border-top: 1px solid #e9ebef;
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 -8px 26px rgba(30, 38, 52, .07);
+      backdrop-filter: blur(14px);
+    }
+
+    .shop-nav {
+      display: grid;
+      flex: 0 0 184px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      min-width: 0;
+    }
+
+    .nav-item {
+      display: flex;
+      min-width: 0;
+      min-height: 52px;
+      padding: 4px 2px;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 2px;
+      border: 0;
+      color: #24262b;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .nav-item:active {
+      color: var(--blue);
+    }
+
+    .nav-icon {
+      position: relative;
+      display: grid;
+      width: 23px;
+      height: 23px;
+      place-items: center;
+    }
+
+    .nav-icon svg {
+      width: 23px;
+      height: 23px;
+    }
+
+    .nav-label {
+      color: #777b83;
+      font-size: 11px;
+      line-height: 1.2;
+    }
+
+    .nav-badge {
+      position: absolute;
+      top: -5px;
+      right: -9px;
+      display: grid;
+      min-width: 17px;
+      height: 17px;
+      padding: 0 4px;
+      place-items: center;
+      border-radius: 999px;
+      color: var(--white);
+      background: #ff9d1f;
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .bottom-bar > .primary-button {
+      flex: 1;
+      width: auto;
+    }
+
+    .primary-button {
+      width: 100%;
+      min-height: 46px;
+      border: 0;
+      border-radius: 12px;
+      color: var(--white);
+      background: linear-gradient(180deg, #4a83fb 0%, #326ef1 100%);
+      font-size: 15px;
+      font-weight: 650;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(57, 120, 246, .24);
+    }
+
+    .primary-button:active {
+      background: linear-gradient(180deg, #3d77ef 0%, #2c63dd 100%);
+      transform: translateY(1px);
+    }
+
+    .seat-layer {
+      position: fixed;
+      z-index: 30;
+      inset: 0;
+      width: min(100%, var(--app-width));
+      margin: 0 auto;
+      padding-bottom: calc(92px + env(safe-area-inset-bottom));
+      overflow-y: auto;
+      background: #f7f8fa;
+      box-shadow: 0 0 50px rgba(0, 0, 0, .22);
+    }
+
+    .seat-layer[hidden] {
+      display: none;
+    }
+
+    .seat-topbar {
+      position: sticky;
+      z-index: 3;
+      top: 0;
+      display: grid;
+      grid-template-columns: 52px 1fr 52px;
+      align-items: center;
+      height: 54px;
+      color: var(--white);
+      background: #15171b;
+    }
+
+    .seat-topbar h2 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .seat-intro {
+      margin: 0;
+      padding: 15px 16px 11px;
+      color: #858890;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .seat-card {
+      margin: 0 12px;
+      padding: 19px 14px 17px;
+      border: 1px solid rgba(233, 237, 242, .9);
+      border-radius: 16px;
+      background: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .room-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      color: #60636a;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .stage {
+      width: 176px;
+      margin: 0 auto 22px;
+      padding: 8px 0;
+      border-radius: 8px 8px 28px 28px;
+      color: #a1a4aa;
+      background: linear-gradient(180deg, #f4f5f7 0%, #eef0f3 100%);
+      font-size: 11px;
+      text-align: center;
+      letter-spacing: 3px;
+    }
+
+    .seat-map {
+      display: grid;
+      gap: 11px;
+      width: max-content;
+      margin: 0 auto;
+    }
+
+    .seat-map-row {
+      display: grid;
+      grid-template-columns: 22px repeat(5, 42px);
+      align-items: center;
+      gap: 8px;
+    }
+
+    .row-label {
+      color: #9da0a7;
+      font-size: 10px;
+      text-align: center;
+    }
+
+    .seat {
+      position: relative;
+      width: 42px;
+      height: 38px;
+      padding: 0;
+      border: 0;
+      border-radius: 10px 10px 7px 7px;
+      color: #aa7b21;
+      background: #ffebc8;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .seat::after {
+      position: absolute;
+      right: 9px;
+      bottom: -3px;
+      left: 9px;
+      height: 4px;
+      border-radius: 0 0 3px 3px;
+      background: currentColor;
+      content: "";
+      opacity: .16;
+    }
+
+    .seat.is-occupied {
+      color: #b6b9c0;
+      background: #eceef1;
+      cursor: not-allowed;
+    }
+
+    .seat.is-occupied::before {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 13px;
+      height: 1px;
+      background: #c8cbd1;
+      content: "";
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    .seat.is-selected {
+      color: var(--white);
+      background: #ff9f1a;
+      box-shadow: 0 4px 10px rgba(238, 144, 0, .24);
+    }
+
+    .seat.is-selected::after {
+      color: #fff;
+      opacity: .45;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 24px;
+      color: #8f9299;
+      font-size: 10px;
+    }
+
+    .legend span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .legend i {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      background: #ffebc8;
+    }
+
+    .legend .current {
+      background: #ff9f1a;
+    }
+
+    .legend .disabled {
+      background: #d8dbe0;
+    }
+
+    .seat-bottom {
+      position: fixed;
+      z-index: 32;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: min(100%, var(--app-width));
+      margin: 0 auto;
+      padding: 11px 16px calc(12px + env(safe-area-inset-bottom));
+      border-top: 1px solid #e7e9ed;
+      background: rgba(255, 255, 255, .97);
+      backdrop-filter: blur(14px);
+    }
+
+    .seat-bottom-status {
+      margin-bottom: 7px;
+      color: #7c7f86;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    .seat-bottom-status strong {
+      color: var(--orange);
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 50;
+      bottom: calc(138px + env(safe-area-inset-bottom));
+      left: 50%;
+      max-width: calc(100vw - 40px);
+      padding: 10px 15px;
+      border-radius: 10px;
+      color: var(--white);
+      background: rgba(30, 32, 36, .9);
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 8px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 380px) {
+      .hero {
+        height: 218px;
+      }
+
+      .hero-word {
+        font-size: 50px;
+      }
+
+      .package-art {
+        right: -9px;
+        width: 195px;
+      }
+
+      .seat-map-row {
+        grid-template-columns: 20px repeat(5, 39px);
+        gap: 7px;
+      }
+
+      .seat {
+        width: 39px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation: none !important;
+      }
+    }
+
+    @keyframes attentionPulse {
+      0%,
+      100% {
+        box-shadow: 0 0 0 3px rgba(244, 183, 64, .12), 0 8px 22px rgba(184, 118, 0, .07);
+      }
+
+      50% {
+        box-shadow: 0 0 0 6px rgba(244, 183, 64, .2), 0 8px 26px rgba(184, 118, 0, .12);
+      }
+    }
+
+    @keyframes courseBodyIn {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <button class="icon-button" type="button" id="backButton" aria-label="返回">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
+      <h1 class="topbar-title">套餐详情</h1>
+      <span aria-hidden="true"></span>
+    </header>
+
+    <section class="hero" aria-label="套餐主视觉">
+      <span class="hero-watermark" aria-hidden="true">TAO CAN</span>
+      <span class="hero-word" aria-hidden="true">套餐</span>
+      <span class="hero-sub" aria-hidden="true">TAO CAN</span>
+      <svg class="package-art" viewBox="0 0 250 220" aria-hidden="true">
+        <g transform="translate(24 10) rotate(-7 110 94)">
+          <rect x="63" y="31" width="137" height="151" rx="20" fill="#d5d9df" stroke="#181a1e" stroke-width="6"/>
+          <rect x="51" y="18" width="137" height="151" rx="20" fill="#fff" stroke="#181a1e" stroke-width="6"/>
+          <path d="M70 132l35-51 25 30 16-18 25 41-101 8z" fill="#8fd8f5"/>
+          <path d="M105 81l25 30 16-18 25 41-66 5z" fill="#58bde7"/>
+          <path d="M74 138l92-7" fill="none" stroke="#181a1e" stroke-linecap="round" stroke-width="4" opacity=".2"/>
+          <circle cx="152" cy="59" r="14" fill="#ffd04a" stroke="#181a1e" stroke-width="4"/>
+        </g>
+      </svg>
+    </section>
+
+    <main>
+      <section class="product-card">
+        <h2 class="product-title">页面交互测试</h2>
+        <div class="price-line">
+          <span class="price"><small>¥</small>3,199.01</span>
+          <span class="original-price">¥13,199</span>
+        </div>
+        <div class="product-meta">
+          <span class="meta-pill">3 个课程项目</span>
+          <span class="meta-pill">规格与班级同页配置</span>
+        </div>
+      </section>
+
+      <section class="config-section" aria-labelledby="configTitle">
+        <div class="section-head">
+          <h2 class="section-title" id="configTitle">
+            套餐内容
+            <span class="section-count" id="progressCount">已完成 0/3</span>
+          </h2>
+        </div>
+        <div class="course-list" id="courseList"></div>
+      </section>
+    </main>
+
+    <footer class="bottom-bar">
+      <nav class="shop-nav" aria-label="商城导航">
+        <button class="nav-item" type="button" data-nav="home">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <path d="M3.5 10.5L12 3.5l8.5 7v9.5a.5.5 0 01-.5.5h-5.5v-6h-5v6H4a.5.5 0 01-.5-.5z"/>
+            </svg>
+          </span>
+          <span class="nav-label">首页</span>
+        </button>
+        <button class="nav-item" type="button" data-nav="favorite">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <path d="M12 20.2L4.4 13A4.8 4.8 0 1112 6.4 4.8 4.8 0 1119.6 13z"/>
+            </svg>
+          </span>
+          <span class="nav-label">收藏</span>
+        </button>
+        <button class="nav-item" type="button" data-nav="cart">
+          <span class="nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <path d="M3.5 4.5h2l2 10.2h10.1l2.1-7.4H7.1M9.2 19a1 1 0 100-2 1 1 0 000 2zm8.4 0a1 1 0 100-2 1 1 0 000 2z"/>
+            </svg>
+            <span class="nav-badge">3</span>
+          </span>
+          <span class="nav-label">购物车</span>
+        </button>
+      </nav>
+      <button class="primary-button" type="button" id="mainAction">立即购买</button>
+    </footer>
+  </div>
+
+  <section class="seat-layer" id="seatLayer" role="dialog" aria-modal="true" aria-labelledby="seatTitle" hidden>
+    <header class="seat-topbar">
+      <button class="icon-button" type="button" id="seatCloseButton" aria-label="关闭选座">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18"/>
+        </svg>
+      </button>
+      <h2 id="seatTitle">选择座位</h2>
+      <span aria-hidden="true"></span>
+    </header>
+
+    <p class="seat-intro">请为当前班级选择座位，保存后返回套餐内容。</p>
+
+    <div class="seat-card">
+      <div class="room-label">
+        <span id="roomLabel">声乐教室</span>
+      </div>
+      <div class="stage">讲 台</div>
+      <div class="seat-map" id="seatMap"></div>
+      <div class="legend" aria-label="座位图例">
+        <span><i></i>可选</span>
+        <span><i class="current"></i>当前选择</span>
+        <span><i class="disabled"></i>不可选</span>
+      </div>
+    </div>
+
+    <footer class="seat-bottom">
+      <div class="seat-bottom-status" id="seatBottomStatus">尚未选择座位</div>
+      <button class="primary-button" type="button" id="saveSeats">保存并返回</button>
+    </footer>
+  </section>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const courses = [
+      {
+        id: "vocal-1",
+        title: "2020声乐课程",
+        room: "声乐教室 A",
+        specs: ["20课时", "30课时"],
+        classes: [
+          { id: "v1-a", name: "暑期班1班", time: "02.26 起 · 周一至周五 08:00–08:30", seats: 8 },
+          { id: "v1-b", name: "暑期班2班", time: "04.03 起 · 周一至周五 08:00–09:00", seats: 0 }
+        ]
+      },
+      {
+        id: "vocal-2",
+        title: "2020声乐课程",
+        room: "声乐教室 B",
+        specs: ["20课时", "30课时"],
+        classes: [
+          { id: "v2-a", name: "暑期班1班", time: "02.18 起 · 周六 09:00–10:30", seats: 6 },
+          { id: "v2-b", name: "暑期班2班", time: "03.02 起 · 周日 14:00–15:30", seats: 5 }
+        ]
+      },
+      {
+        id: "football",
+        title: "2022秋季足球课程",
+        room: "足球训练场",
+        specs: ["秋季班", "寒假班"],
+        classes: [
+          { id: "f-a", name: "秋季足球1班", time: "09.12 起 · 周二 16:30–18:00", seats: 9 }
+        ]
+      }
+    ];
+
+    const state = {
+      activeCourse: courses[0].id,
+      courses: Object.fromEntries(courses.map(course => [
+        course.id,
+        { spec: "", classId: "", seat: null }
+      ])),
+      activeSeatCourse: courses[0].id,
+      lastFocus: null
+    };
+
+    const courseList = document.getElementById("courseList");
+    const progressCount = document.getElementById("progressCount");
+    const mainAction = document.getElementById("mainAction");
+    const shopNav = document.querySelector(".shop-nav");
+    const seatLayer = document.getElementById("seatLayer");
+    const seatCloseButton = document.getElementById("seatCloseButton");
+    const roomLabel = document.getElementById("roomLabel");
+    const seatMap = document.getElementById("seatMap");
+    const seatBottomStatus = document.getElementById("seatBottomStatus");
+    const saveSeats = document.getElementById("saveSeats");
+    const toast = document.getElementById("toast");
+
+    let toastTimer;
+    let attentionTimer;
+
+    function getCourse(id) {
+      return courses.find(course => course.id === id);
+    }
+
+    function getSelection(id) {
+      return state.courses[id];
+    }
+
+    function getSelectedClass(course) {
+      const selection = getSelection(course.id);
+      return course.classes.find(item => item.id === selection.classId) || null;
+    }
+
+    function courseReady(course) {
+      const selection = getSelection(course.id);
+      return Boolean(selection.spec && selection.classId);
+    }
+
+    function courseComplete(course) {
+      return courseReady(course) && Boolean(getSelection(course.id).seat);
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[character]);
+    }
+
+    function renderCourses() {
+      courseList.innerHTML = courses.map((course, index) => {
+        const selection = getSelection(course.id);
+        const selectedClass = getSelectedClass(course);
+        const isOpen = state.activeCourse === course.id;
+        const isComplete = courseComplete(course);
+        const isReady = courseReady(course);
+        const statusClass = isComplete ? "complete" : isReady ? "ready" : "";
+        const statusText = isComplete ? "已完成" : isReady ? "待选座" : "待选择";
+        const summaryParts = [];
+
+        if (selection.spec) summaryParts.push(selection.spec);
+        if (selectedClass) summaryParts.push(selectedClass.name);
+        if (selection.seat) summaryParts.push(selection.seat.label);
+
+        const summary = summaryParts.length
+          ? summaryParts.join(" · ")
+          : "选择规格、班级和座位";
+
+        return `
+          <article class="course-card ${isOpen ? "is-open" : ""} ${isComplete ? "is-complete" : ""}" data-course-card="${course.id}">
+            <button class="course-head" type="button" data-action="toggle-course" data-course="${course.id}" aria-expanded="${isOpen}">
+              <span class="course-number">${isComplete ? "✓" : index + 1}</span>
+              <span class="course-main">
+                <span class="course-title">${escapeHtml(course.title)}</span>
+                <span class="course-summary">${escapeHtml(summary)}</span>
+              </span>
+              <span class="course-arrow">
+                <span class="status-pill ${statusClass}">${statusText}</span>
+                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path d="M9 6l6 6-6 6"/>
+                </svg>
+              </span>
+            </button>
+            <div class="course-body">
+              <div class="choice-block">
+                <div class="choice-label">规格 <span class="required">*</span></div>
+                <div class="chips">
+                  ${course.specs.map(spec => `
+                    <button class="chip ${selection.spec === spec ? "is-selected" : ""}" type="button" data-action="select-spec" data-course="${course.id}" data-value="${escapeHtml(spec)}">${escapeHtml(spec)}</button>
+                  `).join("")}
+                </div>
+              </div>
+
+              <div class="choice-block">
+                <div class="choice-label">
+                  选择班级 <span class="required">*</span>
+                  ${selection.spec ? "" : '<span class="choice-hint">请先选择规格</span>'}
+                </div>
+                <div class="class-list">
+                  ${course.classes.map(item => {
+                    const isFull = item.seats === 0;
+                    return `
+                    <button class="class-option ${selection.classId === item.id ? "is-selected" : ""}" type="button" data-action="select-class" data-course="${course.id}" data-class="${item.id}" ${selection.spec && !isFull ? "" : "disabled"}>
+                      <span class="class-name">${escapeHtml(item.name)}</span>
+                      <span class="class-detail">${escapeHtml(item.time)}</span>
+                      ${isFull ? '<span class="class-full">已满</span>' : ""}
+                      <span class="radio" aria-hidden="true"></span>
+                    </button>
+                  `;
+                  }).join("")}
+                </div>
+              </div>
+
+              <div class="seat-row">
+                <span class="seat-state">
+                  <span class="seat-label">座位</span>
+                  <span class="seat-value ${selection.seat ? "has-value" : selectedClass ? "has-remaining" : ""}">${selection.seat ? escapeHtml(selection.seat.label) : selectedClass ? `剩余 ${selectedClass.seats} 席` : "选择班级后可选座"}</span>
+                </span>
+                <button class="outline-button" type="button" data-action="open-seat" data-course="${course.id}" ${selectedClass ? "" : "disabled"}>${selection.seat ? "重新选座" : "选择座位"}</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      updateFooter();
+    }
+
+    function updateFooter() {
+      const complete = courses.filter(courseComplete).length;
+      const allComplete = courses.every(courseComplete);
+      progressCount.textContent = `已完成 ${complete}/${courses.length}`;
+      mainAction.dataset.mode = allComplete ? "submit" : "configure";
+    }
+
+    function animateCourseBody(courseId) {
+      const body = courseList.querySelector(`[data-course-card="${courseId}"] .course-body`);
+      if (!body) return;
+      body.classList.add("is-entering");
+      body.addEventListener("animationend", () => body.classList.remove("is-entering"), { once: true });
+    }
+
+    function renderSeatLayer() {
+      const currentCourse = getCourse(state.activeSeatCourse);
+      if (!currentCourse || !getSelectedClass(currentCourse)) {
+        closeSeatLayer();
+        return;
+      }
+
+      const currentClass = getSelectedClass(currentCourse);
+      const currentSeat = getSelection(currentCourse.id).seat;
+      const occupied = new Set(currentCourse.id === "vocal-1"
+        ? ["1-1", "1-4", "2-2", "3-5", "4-1", "4-4"]
+        : currentCourse.id === "vocal-2"
+          ? ["1-2", "1-5", "2-1", "3-3", "3-4", "4-2"]
+          : ["1-3", "1-5", "2-2", "2-5", "3-1", "4-4"]);
+
+      roomLabel.textContent = `${currentCourse.room} · ${currentClass.name}`;
+      seatMap.innerHTML = Array.from({ length: 4 }, (_, rowIndex) => {
+        const row = rowIndex + 1;
+        const seats = Array.from({ length: 5 }, (_, columnIndex) => {
+          const column = columnIndex + 1;
+          const key = `${row}-${column}`;
+          const label = `${row}排${column}座`;
+          const isOccupied = occupied.has(key);
+          const isSelected = currentSeat && currentSeat.key === key;
+          return `
+            <button class="seat ${isOccupied ? "is-occupied" : ""} ${isSelected ? "is-selected" : ""}" type="button" data-action="pick-seat" data-course="${currentCourse.id}" data-seat="${key}" data-label="${label}" aria-label="${label}${isOccupied ? "，不可选" : isSelected ? "，当前选择" : "，可选"}" ${isOccupied ? "disabled" : ""}>
+              ${column}
+            </button>
+          `;
+        }).join("");
+
+        return `<div class="seat-map-row"><span class="row-label">${row}</span>${seats}</div>`;
+      }).join("");
+
+      seatBottomStatus.innerHTML = currentSeat
+        ? `当前班级已选 <strong>${escapeHtml(currentSeat.label)}</strong>`
+        : "当前班级尚未选择座位";
+      saveSeats.textContent = currentSeat ? "保存并返回" : "返回套餐内容";
+    }
+
+    function openSeatLayer(courseId) {
+      const requestedCourse = getCourse(courseId);
+      if (!requestedCourse || !getSelectedClass(requestedCourse)) {
+        showToast("请先选择规格和班级");
+        return;
+      }
+
+      state.activeSeatCourse = courseId;
+      state.lastFocus = document.activeElement;
+      renderSeatLayer();
+      seatLayer.hidden = false;
+      document.body.style.overflow = "hidden";
+      seatCloseButton.focus();
+    }
+
+    function closeSeatLayer() {
+      seatLayer.hidden = true;
+      document.body.style.overflow = "";
+      if (state.lastFocus && typeof state.lastFocus.focus === "function") {
+        state.lastFocus.focus();
+      }
+    }
+
+    function showToast(message) {
+      window.clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.add("is-visible");
+      toastTimer = window.setTimeout(() => toast.classList.remove("is-visible"), 1900);
+    }
+
+    function selectSpec(courseId, spec) {
+      getSelection(courseId).spec = spec;
+      renderCourses();
+    }
+
+    function selectClass(courseId, classId) {
+      const selection = getSelection(courseId);
+      if (selection.classId !== classId) {
+        selection.seat = null;
+      }
+      selection.classId = classId;
+      renderCourses();
+    }
+
+    function pickSeat(courseId, key, label) {
+      getSelection(courseId).seat = { key, label };
+      renderSeatLayer();
+    }
+
+    function continueConfiguration() {
+      const pending = courses.find(course => !courseComplete(course));
+      if (!pending) return;
+
+      const selection = getSelection(pending.id);
+      state.activeCourse = pending.id;
+      renderCourses();
+      animateCourseBody(pending.id);
+
+      if (selection.spec && selection.classId) {
+        openSeatLayer(pending.id);
+        return;
+      }
+
+      const card = courseList.querySelector(`[data-course-card="${pending.id}"]`);
+      const selector = selection.spec
+        ? `[data-action="select-class"][data-course="${pending.id}"]`
+        : `[data-action="select-spec"][data-course="${pending.id}"]`;
+      const target = courseList.querySelector(selector);
+
+      window.clearTimeout(attentionTimer);
+      if (card) {
+        card.classList.add("is-attention");
+        card.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      if (target) {
+        target.classList.add("is-attention-target");
+        target.focus({ preventScroll: true });
+      }
+      attentionTimer = window.setTimeout(() => {
+        card?.classList.remove("is-attention");
+        target?.classList.remove("is-attention-target");
+      }, 1700);
+      showToast(selection.spec ? "请选择班级" : "请选择规格");
+    }
+
+    courseList.addEventListener("click", event => {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      const { action, course: courseId, value, class: classId } = button.dataset;
+
+      if (action === "toggle-course") {
+        const isOpening = state.activeCourse !== courseId;
+        state.activeCourse = isOpening ? courseId : "";
+        renderCourses();
+        if (isOpening) animateCourseBody(courseId);
+      }
+
+      if (action === "select-spec") {
+        selectSpec(courseId, value);
+      }
+
+      if (action === "select-class") {
+        selectClass(courseId, classId);
+      }
+
+      if (action === "open-seat") {
+        openSeatLayer(courseId);
+      }
+    });
+
+    seatMap.addEventListener("click", event => {
+      const seat = event.target.closest("[data-action='pick-seat']");
+      if (!seat) return;
+      pickSeat(seat.dataset.course, seat.dataset.seat, seat.dataset.label);
+    });
+
+    mainAction.addEventListener("click", () => {
+      const mode = mainAction.dataset.mode;
+      if (mode === "submit") {
+        showToast("报名信息已提交，进入支付流程");
+      } else {
+        continueConfiguration();
+      }
+    });
+
+    shopNav.addEventListener("click", event => {
+      const item = event.target.closest("[data-nav]");
+      if (!item) return;
+      const labels = { home: "首页", favorite: "收藏", cart: "购物车" };
+      showToast(`打开${labels[item.dataset.nav]}`);
+    });
+
+    seatCloseButton.addEventListener("click", closeSeatLayer);
+    saveSeats.addEventListener("click", () => {
+      closeSeatLayer();
+      renderCourses();
+      showToast("选座结果已保存");
+    });
+
+    document.getElementById("backButton").addEventListener("click", () => {
+      showToast("返回商品列表");
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && !seatLayer.hidden) {
+        closeSeatLayer();
+      }
+    });
+
+    renderCourses();
+  </script>
+</body>
+</html>
