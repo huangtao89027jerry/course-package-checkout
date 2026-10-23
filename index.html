@@ -548,7 +548,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-top: var(--block-gap);
+      margin-top: 0;
       padding: 12px 14px;
       border: 1px solid transparent;
       border-radius: 10px;
@@ -1327,25 +1327,25 @@
                 <div class="class-list">
                   ${course.classes.map(item => {
                     const isFull = item.seats === 0;
+                    const isSelected = selection.classId === item.id;
                     return `
-                    <button class="class-option ${selection.classId === item.id ? "is-selected" : ""}" type="button" data-action="select-class" data-course="${course.id}" data-class="${item.id}" ${isFull ? "disabled" : ""}>
+                    <button class="class-option ${isSelected ? "is-selected" : ""}" type="button" data-action="select-class" data-course="${course.id}" data-class="${item.id}" ${isFull ? "disabled" : ""}>
                       <span class="class-name">${escapeHtml(item.name)}${isFull ? '<span class="class-full">已满</span>' : ""}</span>
                       <span class="class-detail">${escapeHtml(item.time)}</span>
                     </button>
+                    ${isSelected && selectedClass ? `
+                    <div class="seat-row ${selection.seat ? "is-selected" : ""}">
+                      <span class="seat-state">
+                        <span class="seat-label">座位</span>
+                        <span class="seat-value ${selection.seat ? "has-value" : "has-remaining"}">${selection.seat ? escapeHtml(selection.seat.label) : `剩余 ${selectedClass.seats} 席`}</span>
+                      </span>
+                      <button class="outline-button" type="button" data-action="open-seat" data-course="${course.id}">${selection.seat ? "重新选座" : "选择座位"}</button>
+                    </div>
+                    ` : ""}
                   `;
                   }).join("")}
                 </div>
               </div>
-
-              ${selectedClass ? `
-              <div class="seat-row ${selection.seat ? "is-selected" : ""}">
-                <span class="seat-state">
-                  <span class="seat-label">座位</span>
-                  <span class="seat-value ${selection.seat ? "has-value" : "has-remaining"}">${selection.seat ? escapeHtml(selection.seat.label) : `剩余 ${selectedClass.seats} 席`}</span>
-                </span>
-                <button class="outline-button" type="button" data-action="open-seat" data-course="${course.id}">${selection.seat ? "重新选座" : "选择座位"}</button>
-              </div>
-              ` : ""}
             </div>
           </article>
         `;
