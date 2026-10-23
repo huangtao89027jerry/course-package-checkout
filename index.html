@@ -204,6 +204,14 @@
       font-size: 18px;
     }
 
+    .price-suffix {
+      margin-left: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
     .original-price {
       color: #a2a4aa;
       font-size: 14px;
@@ -1085,8 +1093,8 @@
     <main>
       <section class="product-card">
         <h2 class="product-title">页面交互测试</h2>
-        <div class="price-line">
-          <span class="price"><small>¥</small>3,199.01</span>
+        <div class="price-line" aria-live="polite" aria-atomic="true">
+          <span class="price"><small>¥</small><span id="priceAmount">3,199.01</span><span class="price-suffix" id="priceSuffix">起</span></span>
           <span class="original-price">¥13,199</span>
         </div>
       </section>
@@ -1174,7 +1182,10 @@
         id: "vocal-1",
         title: "2020声乐课程",
         room: "声乐教室 A",
-        specs: ["20课时", "30课时"],
+        specs: [
+          { label: "20课时", price: 1199 },
+          { label: "30课时", price: 1799 }
+        ],
         classes: [
           { id: "v1-a", name: "暑期班1班", time: "02.26 起 · 周一至周五 08:00–08:30", seats: 8 },
           { id: "v1-b", name: "暑期班2班", time: "04.03 起 · 周一至周五 08:00–09:00", seats: 0 }
@@ -1184,7 +1195,10 @@
         id: "vocal-2",
         title: "2020声乐课程",
         room: "声乐教室 B",
-        specs: ["20课时", "30课时"],
+        specs: [
+          { label: "20课时", price: 1000 },
+          { label: "30课时", price: 1500 }
+        ],
         classes: [
           { id: "v2-a", name: "暑期班1班", time: "02.18 起 · 周六 09:00–10:30", seats: 6 },
           { id: "v2-b", name: "暑期班2班", time: "03.02 起 · 周日 14:00–15:30", seats: 5 }
@@ -1194,7 +1208,10 @@
         id: "football",
         title: "2022秋季足球课程",
         room: "足球训练场",
-        specs: ["秋季班", "寒假班"],
+        specs: [
+          { label: "秋季班", price: 1000.01 },
+          { label: "寒假班", price: 1200 }
+        ],
         classes: [
           { id: "f-a", name: "秋季足球1班", time: "09.12 起 · 周二 16:30–18:00", seats: 9 }
         ]
@@ -1213,6 +1230,8 @@
 
     const courseList = document.getElementById("courseList");
     const progressCount = document.getElementById("progressCount");
+    const priceAmount = document.getElementById("priceAmount");
+    const priceSuffix = document.getElementById("priceSuffix");
     const mainAction = document.getElementById("mainAction");
     const shopNav = document.querySelector(".shop-nav");
     const seatLayer = document.getElementById("seatLayer");
@@ -1298,7 +1317,7 @@
                 <div class="choice-label">规格 <span class="required">*</span></div>
                 <div class="chips">
                   ${course.specs.map(spec => `
-                    <button class="chip ${selection.spec === spec ? "is-selected" : ""}" type="button" data-action="select-spec" data-course="${course.id}" data-value="${escapeHtml(spec)}">${escapeHtml(spec)}</button>
+                    <button class="chip ${selection.spec === spec.label ? "is-selected" : ""}" type="button" data-action="select-spec" data-course="${course.id}" data-value="${escapeHtml(spec.label)}">${escapeHtml(spec.label)}</button>
                   `).join("")}
                 </div>
               </div>
@@ -1335,11 +1354,28 @@
       updateFooter();
     }
 
+    function updatePrice() {
+      const totalCents = courses.reduce((total, course) => {
+        const selectedSpec = course.specs.find(spec => spec.label === getSelection(course.id).spec);
+        const specPrice = selectedSpec
+          ? selectedSpec.price
+          : Math.min(...course.specs.map(spec => spec.price));
+        return total + Math.round(specPrice * 100);
+      }, 0);
+
+      priceAmount.textContent = (totalCents / 100).toLocaleString("zh-CN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+      priceSuffix.hidden = courses.every(course => Boolean(getSelection(course.id).spec));
+    }
+
     function updateFooter() {
       const complete = courses.filter(courseComplete).length;
       const allComplete = courses.every(courseComplete);
       progressCount.textContent = `已完成 ${complete}/${courses.length}`;
       mainAction.dataset.mode = allComplete ? "submit" : "configure";
+      updatePrice();
     }
 
     function animateCourseBody(courseId) {
