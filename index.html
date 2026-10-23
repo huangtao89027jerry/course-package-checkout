@@ -477,6 +477,7 @@
 
     .class-option.is-selected {
       border-color: var(--blue);
+      border-radius: 10px 10px 0 0;
       background: var(--blue-soft);
     }
 
@@ -561,7 +562,8 @@
     }
 
     .class-option.is-selected + .seat-row {
-      margin-top: -4px;
+      margin-top: calc(var(--block-gap) * -1);
+      border-radius: 0 0 10px 10px;
     }
 
     .seat-row.is-revealing {
