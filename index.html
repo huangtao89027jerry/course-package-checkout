@@ -428,7 +428,7 @@
     .chip {
       min-width: 76px;
       padding: 9px 15px;
-      border: 1px solid #e4e8ee;
+      border: 0;
       border-radius: 10px;
       color: #555860;
       text-align: center;
@@ -439,9 +439,7 @@
     }
 
     .chip.is-selected {
-      border-color: var(--blue);
       background: var(--blue-soft);
-      box-shadow: 0 2px 7px rgba(57, 120, 246, .1);
     }
 
     .class-option.is-selected {
@@ -531,11 +529,10 @@
       justify-content: space-between;
       gap: 12px;
       margin-top: 16px;
-      padding: 13px 0 0;
+      padding: 12px;
       border: 0;
-      border-top: 1px solid #e7eaef;
-      border-radius: 0;
-      background: transparent;
+      border-radius: 10px;
+      background: var(--white);
     }
 
     .seat-state {
